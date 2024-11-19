@@ -1,0 +1,22 @@
+{
+  "name": "tp1",
+  "type": "module",
+  "engines": {
+    "node": "16.14.2"
+  },
+  "version": "1.0.0",
+  "description": "site de nouvelles",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Rick Sebastien Julien",
+  "license": "ISC",
+  "dependencies": {
+    "date-and-time": "^2.4.3",
+    "properties-reader": "^2.3.0",
+    "query-string": "^8.1.0",
+    "uuid": "^11.0.2"
+  }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Nouvelles Du Coin</title>
+
+    <link rel="site.webmanifest" href="manifest.json" />
+    <link rel="icon" href="newsLogo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" hreff="css/newsUi.css">
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <img src="newsLogo.png" class="appLogo" alt="" title="Gestionnaire de Nouvelles">
+            <h4 id="actionTitle">Liste des Nouvelles</h4>
+            <i class="cmdIcon fa fa-plus" id="createNews" title="Ajouter une Nouvelles"></i>
+            <i class="cmdIcon fa fa-times" id="abort" title="Annuler"></i>
+            <i class="cmdIcon fa fa-info-circle mx-2" id="aboutCmd"></i> 
+            <select name="Category" id="CategoryMenu"></select>
+        </div>
+        <div id="content">
+            <div id="scrollPanel">
+                <div id="itemsPanel">
+                    <div class="NewsRow" id="sample">
+                        <div class="NewsContainer noselect">
+                            <div class="NewsLayout">
+                                <div class="News">
+                                    <a href="" target="_blank">sample </a>
+                                    <span class="NewsTitle">sample</span>
+                                </div>
+                                <span class="NewsCategory">sample Category</span>
+                            </div>
+                            <div class="NewsCommandPanel">
+                                <span class="editCmd cmdIcon fa fa-pencil" editNewsId="${News.Id}"
+                                    title="Modifier ${News.Title}"></span>
+                                <span class="deleteCmd cmdIcon fa fa-trash" deleteNewsId="${News.Id}"
+                                    title="Effacer ${News.Title}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="forms">
+                <div id="NewsForm"></div>
+                <div id="errorContainer" class="errorContainer"></div>
+                <div id="aboutContainer" class="aboutContainer">
+                    <h2>Gestionnaire de favoris</h2>
+                    <hr>
+                    </p>
+                        Single page application that shows News
+                    <p>
+                        Auteur: Rick Sebastien Julien
+                    </p>
+                    <p>
+                        Collège Lionel-Groulx, automne 2024
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="js/News_API.JS"></script>
+    <script src="js/PageManagers.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/imageControl.js"></script>
+    <script src="js/appUI.js"></script>
+
+</body>
+
+</html>
