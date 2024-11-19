@@ -82,7 +82,7 @@ async function renderNews(queryString) {
     queryString += "&sort=category";
     if (selectedCategory != "") queryString += "&category=" + selectedCategory;
     addWaitingGif();
-    $("#itemsPanel").empty();
+  
     let response = await News_API.Get(queryString);
     
     if (!News_API.error) {
@@ -99,9 +99,6 @@ async function renderNews(queryString) {
             $(".deleteCmd").off();
             $(".deleteCmd").on("click", function () {
                 renderDeleteNewsForm($(this).attr("deleteNewsId"));
-            });
-            $(".expandCmd").on("click", function () {
-                renderNewsPage($(this).attr("expandsNewsId"));
             });
         } else
             endOfData = true;
@@ -144,7 +141,7 @@ function renderNew(news) {
             <div class="NewsCommandPanel">
                 <span class="editCmd cmdIcon fa fa-pencil" editNewsId="${news.Id}" title="Modifier ${news.Title}"></span>
                 <span class="deleteCmd cmdIcon fa fa-trash" deleteNewsId="${news.Id}" title="Effacer ${news.Title}"></span>
-                <span class="expandCmd cmdIcon fa fa-plus" expandsNewsId="${news.Id}" title="voir plus"></span>
+            
             </div>
         </div>
     </div>           
