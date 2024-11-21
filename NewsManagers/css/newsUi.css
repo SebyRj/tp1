@@ -1,56 +1,84 @@
-
 .NewsRow {
-    padding: 8px;
-    padding-bottom: 0px;
-   /* scroll-snap-align: start;*/
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-grow: 1;
+    margin-bottom: 16px;
 }
 
-.NewsContainer {
+.NewsRow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.NewsContent {
     display: grid;
-    grid-template-columns: 4fr 1fr;
-    align-items: top;
-    background-color: #eee;
-    border-radius: 6px;
+    grid-template-columns: 350px auto;
 }
 
 .NewsContainer .cmdIcon {
     display: none;
+
 }
 
 .NewsContainer:hover .cmdIcon {
     display: block;
 }
 
-.NewsLayout {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 10px;
-    gap: 8px;
-    align-items: center;
-}
 
-.News {
-    display: grid;
-    grid-template-columns: 30px auto;
+
+
+.NewsImg {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    width: 340px;
+    height: 200px;
+
+    max-height: 200px;
+    border-radius: 8px;
 }
 
 .NewsTitle {
-    font-size: 1.1rem;
+    font-size: 20px;
     font-weight: bold;
-    color: black;
+    color: purple;
+}
+
+.NewsDate {
+    font-size: 0.9rem;
+    color: gray;
 }
 
 .NewsCategory {
-    color: dodgerblue !important;
+    color: crimson;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .NewsCommandPanel {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 8px;
+    gap: 10px;
+    align-items: center;
 }
+
+.News {
+    width: auto;
+}
+
 
 .NewsdeleteForm {
     margin: 20px;
+}
+
+.catCss {
+    margin: 10px
 }

@@ -8,8 +8,8 @@ let hold_Periodic_Refresh = false;
 let pageManager;
 let itemLayout;
 let waiting = null;
-
 let waitingGifTrigger = 2000;
+let endOfData = false
 function addWaitingGif() {
     clearTimeout(waiting);
     waiting = setTimeout(() => {
@@ -39,6 +39,12 @@ async function Init_UI() {
     $('#aboutCmd').on("click", function () {
         renderAbout();
     });
+        $("#SearchMenu").on("change", () => {
+        doSearch();
+    })
+    $('#doSearch').on('click', () => {
+        doSearch();
+    })
     showNews();
     start_Periodic_Refresh();
 }
@@ -76,21 +82,29 @@ function renderAbout() {
     $("#actionTitle").text("À propos...");
     $("#aboutContainer").show();
 }
-async function renderNews(queryString) {
+async function renderNews(queryString = "") {
+
     
-    let endOfData = false;
     queryString += "&sort=category";
     if (selectedCategory != "") queryString += "&category=" + selectedCategory;
-    addWaitingGif();
-  
-    let response = await News_API.Get(queryString);
     
+    addWaitingGif();
+
+    let response = await News_API.Get(queryString);
+
     if (!News_API.error) {
         currentETag = response.ETag;
         let News = response.data;
         if (News.length > 0) {
-            News.forEach(N => {
+            News.forEach(N => 
+            {
+                if(SelectedKeyword.trim() !== ""){
+                    if(N.Title.toLowerCase().includes(SelectedKeyword.toLowerCase()) ||N.Text.toLowerCase().includes(SelectedKeyword.toLowerCase()))
+                        {$("#itemsPanel").append(renderNew(N));}
+             }
+             else{
                 $("#itemsPanel").append(renderNew(N));
+             }
             });
             $(".editCmd").off();
             $(".editCmd").on("click", function () {
@@ -106,9 +120,10 @@ async function renderNews(queryString) {
         renderError(News_API.currentHttpError);
     }
     removeWaitingGif();
+    console.log(queryString)
     return endOfData;
 }
- function convertToFrenchDate(numeric_date) {
+function convertToFrenchDate(numeric_date) {
     date = new Date(numeric_date);
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
     var opt_weekday = { weekday: 'long' };
@@ -132,46 +147,24 @@ function renderNew(news) {
             <div class="NewsLayout">
                 <div class="News">
                     <span class="NewsTitle">${news.Title}</span>
-                    <div class="NewsImg" style="background-image:url('${news.Image}')"></div>
+                    <div class ="NewsContent">                    
+                        <div class="NewsImg" style="background-image:url('${news.Image}')"></div>
+                        <div class= "NewsText">${news.Text}</div>
+                    </div>
                     <span class="NewsDate">${newsDate}</span>
-                    <div class= "NewsText">${news.Text}</div>
                 </div>
                 <span class="NewsCategory">${news.Category}</span>
             </div>
             <div class="NewsCommandPanel">
                 <span class="editCmd cmdIcon fa fa-pencil" editNewsId="${news.Id}" title="Modifier ${news.Title}"></span>
                 <span class="deleteCmd cmdIcon fa fa-trash" deleteNewsId="${news.Id}" title="Effacer ${news.Title}"></span>
-            
+                 
             </div>
         </div>
     </div>           
     `);
 }
-async function renderNewsPage(newsId){
-    let response = await News_API.Get(newsId)
-    let news = response.data;
-    newsDate = convertToFrenchDate(news.Creation);
-    return $(`
-        <div class="NewsRow" id='${news.Id}'>
-           <div class="NewsContainer noselect">
-                <div class="NewsCommandPanel">
-                   <span class="editCmd cmdIcon fa fa-pencil" editNewsId="${news.Id}" title="Modifier ${news.Title}"></span>
-                   <span class="deleteCmd cmdIcon fa fa-trash" deleteNewsId="${news.Id}" title="Effacer ${news.Title}"></span>
-               </div>
-               <div class="NewsLayout">
-                   <div class="News">
-                       <span class="NewsTitle">${news.Title}</span>
-                       <div class="NewsImg" style="background-image:url('${news.Image}')"></div>
-                       <span class="NewsDate">${newsDate}</span>
-                   </div>
-                   <span class="NewsCategory">${news.Category}</span>
-                   
-               </div>
 
-           </div>
-       </div>           
-       `);
-}
 function newsNews() {
     news = {};
     news.Id = 0;
@@ -218,10 +211,7 @@ async function renderDeleteNewsForm(id) {
                         </div>
                         <span class="NewsCategory">${News.Category}</span>
                     </div>
-                    <div class="NewsCommandPanel">
-                        <span class="editCmd cmdIcon fa fa-pencil" editNewsId="${News.Id}" title="Modifier ${News.Title}"></span>
-                        <span class="deleteCmd cmdIcon fa fa-trash" deleteNewsId="${News.Id}" title="Effacer ${News.Title}"></span>
-                    </div>
+
                 </div>
             </div>   
             <br>
@@ -302,13 +292,13 @@ function renderNewsForm(news = null) {
         </form>
     `);
     initImageUploaders();
-    initFormValidation(); 
+    initFormValidation();
     $('#newsForm').on("submit", async function (event) {
         event.preventDefault();
         let news = getFormData($("#newsForm"));
 
         news.Creation = Date.now();
-     
+
         news = await News_API.Save(news, create);
         if (!News_API.error) {
             showNews();
@@ -325,18 +315,18 @@ function renderNewsForm(news = null) {
 }
 
 function doSearch() {
-    previousScrollPosition = 0;
     $("#content").scrollTop(0);
-    offset = 0;
+    
     endOfData = false;
     SelectedKeyword = $("#SearchMenu").val();
-    renderNews(true);
+    pageManager.reset()
+    
 }
 function updateFilterMenu() {
     let CategoryMenu = $("#CategoryMenu");
 
     CategoryMenu.empty();
-    if(selectedCategory != ""){
+    if (selectedCategory != "") {
         CategoryMenu.append($(`
             <option value=${selectedCategory}>${selectedCategory}</option>
             `));
@@ -345,7 +335,7 @@ function updateFilterMenu() {
         <option value="">Toutes les Catégories</option>
         `));
     categories.forEach(category => {
-        if(category != selectedCategory){
+        if (category != selectedCategory) {
             CategoryMenu.append($(`
                 <option value="${category}">${category}</option>
             `));
@@ -353,7 +343,7 @@ function updateFilterMenu() {
     })
     CategoryMenu.on("change", function () {
 
-       
+
         selectedCategory = this.value;
         showNews();
         pageManager.reset();
@@ -385,6 +375,6 @@ function getFormData($form) {
 function renderError(message) {
     hideNews();
     $("#actionTitle").text("Erreur du serveur...");
-    $("#errorContainer").show(); 
+    $("#errorContainer").show();
     $("#errorContainer").append($(`<div>${message}</div>`));
 }
