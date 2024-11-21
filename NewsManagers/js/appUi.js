@@ -304,7 +304,7 @@ function renderNewsForm(news = null) {
             showNews();
             await pageManager.update(false);
             compileCategories();
-            pageManager.scrollToElem(news.Id);
+            
         }
         else
             renderError("Une erreur est survenue!");
